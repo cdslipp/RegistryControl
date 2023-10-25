@@ -1,38 +1,25 @@
-# create-svelte
+# Registry Control Project
+========================
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+## Introduction
+------------
 
-## Creating a project
+The Registry Control Project is a web-based application designed to assist with various theatre-related controls. It's been developed using SvelteKit, a popular front-end framework.
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Features Developed
+------------------
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+-   Show Mode Toggle: A toggle feature to enable or disable the show mode.
+-   Projector Access: Provides a means to access the projector controls or display.
+-   House Lights Control: An interface to control the house lights.
+-   Help Dashboard: A dedicated dashboard for help topics.
+-   Contact Information: Displays essential contact information for assistance.
+-   Date and Rental Type Display: Current date and the rental type of the theatre are shown for user's reference.
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+## Pending Tasks
+-------------
 
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+-   Enable Show Mode: Logic behind the enabling of the show mode.
+-   Navigate to Projector: Finalize the functionality for navigating to the projector.
+-   Help Articles: Refinement needed to load help articles from markdown files.
+-   Expand LX Controls: More functionalities under "More Lx" to be added.
