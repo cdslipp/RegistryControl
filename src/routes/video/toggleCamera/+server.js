@@ -37,56 +37,38 @@ export async function POST(event) {
   });
 
   try {
-    console.log("Trying to send a request to ", ip, " with ports ", ports);
-
-    const requestBody = body.toString();
-    console.log("Request Body:", requestBody);
-
-    const headers = {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': 'Basic ' + btoa('admin:@aPEe9qAab'), // replace with actual username and password
-    };
-
-    console.log("Request Headers:", headers);
-
-    const cURLCommand = generateCURLCommand(`http://${ip}/poe_port_config.cgi`, 'POST', headers, requestBody);
-    console.log("cURL Command:", cURLCommand);
-
-    const response = await fetch(`http://${ip}/poe_port_config.cgi`, {
+    const response = await fetch(`http://${ip}/PoEConfigRpm.htm`, {
       method: 'POST',
-      headers: headers,
-      body: requestBody,
-      verbose: true
+      body: body.toString(),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      }
     });
 
-
-    console.log("Response Status:", response.status);
-    console.log("Response Status Text:", response.statusText);
-    console.log("Response Headers:", Object.fromEntries(response.headers));
-
-    if (response.ok) {
-      const text = await response.text();
-      console.log("Response Body:", text);
-      return new Response(JSON.stringify({ data: text }), { status: 200, headers: { 'Content-Type': 'application/json' } });
-    } else {
-      return new Response(JSON.stringify({ error: response.statusText }), { status: response.status, headers: { 'Content-Type': 'application/json' } });
+    if (!response.ok) {
+      console.error('Failed to toggle camera:', response.statusText);
+      return new Response(JSON.stringify({ error: 'Failed to toggle camera' }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
-  } catch (error) {
-    console.error("Fetch Error:", error.message);
-    return new Response(JSON.stringify({ error: error.message }), { status: 500, headers: { 'Content-Type': 'application/json' } });
-  }
-}
 
-/**
- * Generate cURL command from request details
- * 
- * @param {string} url 
- * @param {string} method 
- * @param {Record<string, string>} headers 
- * @param {string} body 
- * @returns {string}
- */
-function generateCURLCommand(url, method, headers, body) {
-  const headerString = Object.entries(headers).map(([key, value]) => `-H "${key}: ${value}"`).join(' ');
-  return `curl -X ${method} ${headerString} --data "${body}" "${url}"`;
+    const text = await response.text();
+    console.log('Switch response:', text);
+
+    // Additional logic to parse and handle the switch response can be added here
+    // if necessary.
+
+    return new Response(JSON.stringify({ success: true }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    });
+
+  } catch (error) {
+    console.error('Failed to toggle camera:', error);
+    return new Response(JSON.stringify({ error: 'Failed to toggle camera' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
 }
