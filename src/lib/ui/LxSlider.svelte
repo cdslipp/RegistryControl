@@ -1,17 +1,24 @@
 <script>
-	import { onMount, onDestroy} from 'svelte';
-	import { writable } from 'svelte/store';
+	import { onMount, onDestroy } from 'svelte';
+	import { writable, get } from 'svelte/store';
+	import debounce from 'lodash-es/debounce';
 
 	export let lightSetName;
 
 	let unsubscribe;
+	const debouncedUpdateLightLevel = debounce(updateLightLevel, 200); // Adjust the delay as needed
+
+	// A reactive statement at the top level of your script, not inside onMount
+	$: if (lightSetName && typeof window !== 'undefined') {
+		debouncedUpdateLightLevel($percentage);
+	}
 
 	onMount(() => {
 		console.log('mounted');
-		// No need to change this if it doesn't involve direct lxApi calls
 	});
 
 	onDestroy(() => {
+		debouncedUpdateLightLevel.cancel(); // Cancel any pending debounced calls
 		console.log(`[onDestroy] Cleanup code for ${lightSetName}`);
 		// No need to change this if it doesn't involve direct lxApi calls
 	});
@@ -19,7 +26,7 @@
 	const percentage = writable(0);
 	let containerHeight = 0;
 	let contentHeight = 0;
-    let scrollY = 0;
+	let scrollY = 0;
 
 	onMount(async () => {
 		if (lightSetName) {
@@ -49,28 +56,28 @@
 
 	async function updateLightLevel(level) {
 		try {
-			const response = await fetch('/lights/dimmer', {
+			const response = await fetch('/lights/setLevels', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify({
-					action: 'setLightLevel',
-					channels: lightSetName,
+					channels: lightSetName, // Assuming `lightSetName` contains the channels
 					level
 				})
 			});
 
-			if (!response.ok) {
-				throw new Error(`HTTP error! status: ${response.status}`);
+			const result = await response.json();
+			if (response.ok) {
+				// Handle success
+				console.log(result);
+			} else {
+				// Handle the error response from the server
+				throw new Error(result.error || 'An error occurred while setting the light level');
 			}
 		} catch (error) {
 			console.error('Error setting light level:', error);
 		}
-	}
-
-	$: if (lightSetName) {
-		updateLightLevel($percentage);
 	}
 
 	function onScroll(event) {
@@ -80,13 +87,12 @@
 		percentage.set(newPercentage);
 	}
 
-
 	function updateFill(newPercentage) {
 		const currentPercentage = $percentage;
 		const difference = Math.abs(currentPercentage - newPercentage);
 
 		// If the jump is significant, animate the transition
-		if (difference > 10) {
+		if (difference > 5) {
 			const duration = 500; // Duration of the animation in milliseconds
 			const start = Date.now();
 
@@ -116,7 +122,13 @@
 
 <svelte:window bind:scrollY />
 
-<div class="slider-container" on:scroll={onScroll} on:click={() => updateFill($percentage === 0 ? 100 : 0)} bind:clientHeight={containerHeight} role=slider>
+<div
+	class="slider-container"
+	on:scroll={onScroll}
+	on:click={() => updateFill($percentage === 0 ? 100 : 0)}
+	bind:clientHeight={containerHeight}
+	role="slider"
+>
 	<div class="slider-labels">
 		<h3>{label}</h3>
 		<span>{$percentage.toFixed(0)}%</span>

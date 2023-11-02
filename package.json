@@ -34,6 +34,8 @@
   "type": "module",
   "dependencies": {
     "@sveltejs/svelte-scroller": "^2.0.7",
+    "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
     "svelte-markdown": "^0.4.0",
     "xml-js": "^1.6.11"
   }
