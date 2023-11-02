@@ -5,17 +5,16 @@
 
 	export let lightSetName;
 
-	let unsubscribe;
+    /** @type {string} */
+	export let label;
+
 	const debouncedUpdateLightLevel = debounce(updateLightLevel, 200); // Adjust the delay as needed
 
 	// A reactive statement at the top level of your script, not inside onMount
 	$: if (lightSetName && typeof window !== 'undefined') {
 		debouncedUpdateLightLevel($percentage);
+        console.log(`[onMount] Setting up light level for ${lightSetName}`);
 	}
-
-	onMount(() => {
-		console.log('mounted');
-	});
 
 	onDestroy(() => {
 		debouncedUpdateLightLevel.cancel(); // Cancel any pending debounced calls
@@ -30,33 +29,36 @@
 
 	onMount(async () => {
 		if (lightSetName) {
-			try {
-				const response = await fetch('/lights/dimmer', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify({
-						action: 'getLightLevel',
-						lightSetName
-					})
-				});
-
-				if (!response.ok) {
-					throw new Error(`HTTP error! status: ${response.status}`);
-				}
-
-				const data = await response.json();
-				percentage.set(data.averageLevel);
-			} catch (error) {
-				console.error('Error fetching light level:', error);
-			}
+			getLightLevels(lightSetName);
 		}
 	});
 
+	// Function to fetch the initial light levels from the server
+	async function getLightLevels(lightSetName) {
+		try {
+			const response = await fetch('/lights/getLevels', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ lightSetName })
+			});
+
+			if (!response.ok) {
+				throw new Error(`HTTP error! status: ${response.status}`);
+			}
+
+			const data = await response.json();
+			percentage.set(data.averageLevel);
+		} catch (error) {
+			console.error('Error fetching light level:', error);
+		}
+	}
+
 	async function updateLightLevel(level) {
 		try {
-			const response = await fetch('/lights/setLevels', {
+			console.log(`Updating light level for ${lightSetName} to ${level}`);
+            const response = await fetch('/lights/setLevels', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
@@ -116,8 +118,6 @@
 		}
 	}
 
-	/** @type {string} */
-	export let label;
 </script>
 
 <svelte:window bind:scrollY />

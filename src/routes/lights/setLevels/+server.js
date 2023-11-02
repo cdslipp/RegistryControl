@@ -4,6 +4,7 @@ import { json } from '@sveltejs/kit';
 export async function POST({ request }) {
   try {
     console.log('Setting levels now');
+    console.log(request.json)
     const { channels, level } = await request.json();
     await lxApi.setLightLevel(channels, level);
     return json({ success: true });

@@ -1,5 +1,6 @@
 import { get } from "svelte/store";
 import { activeSliders } from "./lxStores";
+import { lights } from "./lxStores";
 
 
 /**
@@ -59,3 +60,40 @@ export function cleanup(activeSliders, lightSetName, unsubscribe) {
         unsubscribe();
     };
 }
+
+/** GET CHANNEL NUMBERS
+ * Fetches the array of channel numbers for a given light set name.
+ * 
+ * @param {string} lightSetName - The name of the light set.
+ * @returns {number[] | null} - An array of channel numbers if found, or null if the light set does not exist.
+ * 
+ * @example
+ * // Get channel numbers for the 'house' light set
+ * const houseChannels = getChannelNumbers('house');
+ * if (houseChannels) {
+ *   console.log('House channels:', houseChannels);
+ * } else {
+ *   console.log('Light set not found');
+ * }
+ * 
+ * @description
+ * This function looks up the light set name in the `lights` store,
+ * which contains mappings between light set names and their respective channel numbers.
+ * If the light set name is found in the store, it returns the associated array of channel numbers.
+ * If not found, it returns null, indicating that the light set does not exist.
+ * This function is useful when you need to perform operations based on the channel numbers
+ * associated with a light set, such as constructing XML commands for light control.
+ */
+export const getChannelNumbers = (lightSetName) => {
+  const lightsConfig = get(lights);
+
+  // Check if the lightSetName exists in the lights configuration
+  if (!lightsConfig.hasOwnProperty(lightSetName)) {
+    console.error(`No light set found with the name: ${lightSetName}`);
+    return null;
+  }
+
+  // Return the array of channel numbers for the specified light set
+  console.log(`Found light set: ${lightSetName}`,lightsConfig[lightSetName]);
+  return lightsConfig[lightSetName];
+};

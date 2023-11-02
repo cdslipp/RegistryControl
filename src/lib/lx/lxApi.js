@@ -2,6 +2,7 @@
 import { get } from 'svelte/store';
 import { dimmerRacks, apiConfig, lights } from './lxStores';
 import { xml2js } from 'xml-js';
+import { getChannelNumbers } from './lxHelpers';
 
 let lastCallTimestamp = 0;
 let lastSentValues = {};
@@ -23,7 +24,6 @@ const sendCommand = async (xmlCommand) => {
         })
     );
     const responses = await Promise.all(promises);
-    console.log('Responses:', responses);
     return responses;
 };
 
@@ -52,15 +52,32 @@ const rateLimitedSendCommand = async (xmlCommand) => {
  * @param {number} level - The light level to set.
  * @returns {Promise<void>} - A promise that resolves when the command has been sent.
  */
-export const setLightLevel = async (channels, level) => {
-    if (!Array.isArray(channels)) channels = [channels]; // Ensure channels is an array
-    const channelKey = channels.sort().join(','); // Create a unique key for this set of channels
+export const setLightLevel = async (lightSetName, level) => {
+    // Retrieve the lights configuration and find the channel numbers for the given light set
+    const lightsConfig = get(lights);
+    const channels = lightsConfig[lightSetName];
 
-    if (lastSentValues[channelKey] === level) return; // Prevent repeated calls with the same value
+    // If no channels are found for the given light set, log an error and return early
+    if (!channels) {
+        console.error(`No channels found for light set: ${lightSetName}`);
+        return;
+    }
+
+    // Sort the channel numbers and create a unique key for caching purposes
+    const sortedChannels = [...channels].sort();
+    const channelKey = sortedChannels.join(',');
+
+    // Prevent repeated calls with the same value
+    if (lastSentValues[channelKey] === level) return;
     lastSentValues[channelKey] = level;
 
-    const xmlCommands = channels.map(channel => `<set udn="${channel}" space="1" level="${level}" side="both"/>`).join('');
+    // Build the XML command with the actual channel numbers
+    const xmlCommands = sortedChannels.map(channelNumber => 
+        `<set udn="${channelNumber}" space="1" level="${level}" side="both"/>`
+    ).join('');
     const xmlCommand = `<setlevels>${xmlCommands}</setlevels>`;
+
+    console.log('Sending XML command:', xmlCommand);
     return rateLimitedSendCommand(xmlCommand);
 };
 
@@ -111,12 +128,7 @@ export const fetchLightLevels = async () => {
  * @returns {Promise<number>} - A promise that resolves with the average light level of the channels in the light set.
  */
 export const getLightLevel = async (lightSetName) => {
-    const lightsConfig = get(lights);
-    const channels = lightsConfig[lightSetName];
-    if (!channels) {
-        console.error(`No channels found for light set: ${lightSetName}`);
-        return 0;
-    }
+    const channels = getChannelNumbers(lightSetName);
 
     const allLevels = await fetchLightLevels();
     const relevantLevels = channels.map(channel => allLevels[channel]).filter(level => level !== undefined);
