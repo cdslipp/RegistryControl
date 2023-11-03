@@ -1,5 +1,6 @@
 <script>
-    import { onMount } from 'svelte';
+    import LxSlider from '$lib/ui/LxSlider.svelte';
+import { onMount } from 'svelte';
 	import { writable } from 'svelte/store';
   
     const dimmerStatuses = writable([]);
@@ -23,7 +24,17 @@
       getDimmerStatuses();
     });
   </script>
+
+<section id="main-grid">
+    <LxSlider lightSetName="house" label="House Lights" />
+  <LxSlider lightSetName="front" label="Front Lights" />
+  <LxSlider lightSetName="sides" label="Side Lights" />
+  <LxSlider lightSetName="tops" label="Top Lights" />
+    
+  </section>
+
   
+
   <h1>Dimmer Statuses</h1>
   {#if $error}
     <p>Error: {$error}</p>

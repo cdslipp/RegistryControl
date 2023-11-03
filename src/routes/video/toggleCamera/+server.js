@@ -1,4 +1,5 @@
 // src/routes/toggleCamera/+server.js
+import { loginToSwitch } from '$lib/video/switchApi';
 
 /**
  * @typedef {Object} Ports
@@ -25,6 +26,7 @@ export async function POST(event) {
   const { currentStatus, ip, ports } = await event.request.json();
 
   console.log("Starting a request to ", ip, " with ports ", ports);
+  await loginToSwitch();
 
   const body = new URLSearchParams({
     name_pstate: currentStatus ? '0' : '1',

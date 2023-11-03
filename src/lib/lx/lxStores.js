@@ -11,7 +11,9 @@ export const lightLevels = writable(0);
 
 export const lights = writable({
   house: [72],
-  front: [1, 2, 3, 4, 5, 6],
+  front: [25, 26, 27, 21, 20, 19],
+  sides: [31, 37, 8, 2, 9, 3],
+  tops: [7, 13, 1, 14, 15, 16]
   // add other light groups as needed
 });
 

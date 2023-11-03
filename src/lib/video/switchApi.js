@@ -12,6 +12,8 @@ export async function loginToSwitch() {
     });
 
     try {
+        console.log('Logging in to TP-Link switch');
+        console.log(loginBody.toString());
         const loginResponse = await fetch('http://192.168.0.10/logon.cgi', {
             method: 'POST',
             headers: {
@@ -19,8 +21,10 @@ export async function loginToSwitch() {
                 // Add any other headers required for the login request
             },
             body: loginBody.toString(),
+            
             credentials: 'omit'  // Ensure to set the appropriate credentials option
         });
+        
 
         if (!loginResponse.ok) {
             console.error('Failed to log in:', loginResponse.status, loginResponse.statusText);

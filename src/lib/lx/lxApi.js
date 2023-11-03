@@ -47,15 +47,36 @@ const rateLimitedSendCommand = async (xmlCommand) => {
 };
 
 /**
- * Set light level for a list of channels.
- * @param {string[] | string} channels - An array of channel UDNs or a single channel UDN.
+ * Release all lights directly by sending an XML command to all connected dimmer racks.
+ * @returns {Promise<void>} - A promise that resolves when the lights have been released.
+ */
+export const releaseAllLights = async () => {
+    const xmlCommand = `<release_all space="1" />`;
+    try {
+        console.log('Sending release all lights command:', xmlCommand);
+        await rateLimitedSendCommand(xmlCommand);
+        console.log('All lights released successfully.');
+    } catch (error) {
+        console.error('Error releasing all lights:', error);
+    }
+};
+
+/**
+ * Set light level for a list of channels or a light set.
+ * If the level is set to 0, the releaseAllLights function is called.
+ * @param {string} lightSetName - The name of the light set.
  * @param {number} level - The light level to set.
  * @returns {Promise<void>} - A promise that resolves when the command has been sent.
  */
 export const setLightLevel = async (lightSetName, level) => {
-    // Retrieve the lights configuration and find the channel numbers for the given light set
-    const lightsConfig = get(lights);
-    const channels = lightsConfig[lightSetName];
+    // If the level is 0, release all lights and return early
+    if (level === 0) {
+        await releaseAllLights();
+        return;
+    }
+
+    // Retrieve the channel numbers for the given light set using the helper function
+    const channels = getChannelNumbers(lightSetName);
 
     // If no channels are found for the given light set, log an error and return early
     if (!channels) {
