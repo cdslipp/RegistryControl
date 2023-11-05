@@ -20,9 +20,7 @@ export async function loginToSwitch() {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 // Add any other headers required for the login request
             },
-            body: loginBody.toString(),
-            
-            credentials: 'omit'  // Ensure to set the appropriate credentials option
+            body: loginBody.toString()
         });
         
 
