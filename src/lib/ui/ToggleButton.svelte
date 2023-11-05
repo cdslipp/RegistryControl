@@ -1,7 +1,10 @@
 <script>
     export let on = false;
+    export let onToggle = (on) => {};
+
     const handleClick = () => {
         on = !on;
+        onToggle(on);
     };
 </script>
 
