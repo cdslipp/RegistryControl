@@ -56,7 +56,7 @@
       display: grid;
       grid-template-rows: auto 1fr;
       height: 80vh;
-      width:80vw;
+      width:100%;
       justify-items: center;
       align-content: center;
       background-color: var(--primary-bg);
@@ -84,15 +84,15 @@
     .custom-keyboard {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      max-width: 300px;
+      gap: 14px;
+      width: 80%;
       margin-top: 30px;
     }
   
     .key {
       padding: 20px;
       font-size: 1.5rem;
-      color: var(--primary-text);
+      color: var(--button-text);
       background-color: var(--default-buttons);
       border: none;
       border-radius: 10%;

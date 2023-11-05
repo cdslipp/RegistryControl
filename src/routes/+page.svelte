@@ -7,7 +7,4 @@
 </script>
 
 
-<Pin />
-<!-- <Locked /> -->
-<!-- <App />
-<PinModal /> -->
+<App />

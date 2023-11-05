@@ -5,6 +5,7 @@
     --primary-bg: #1B1919;
     --primary-text: #F6F6F6;
     --default-buttons: #D9D9D9;
+    --button-text: #1B1919;
     --blue: #67A4CF;
     --yellow: #FFDF1E;
     --orange: #F9A03A;
@@ -88,10 +89,19 @@ button h2{
 
 #main-content {
     display: flex;
-    background-color: var(--primary-bg);
     flex-direction: column;
     justify-content: center;
-    width: 100%;
+    align-items: center; /* Align items vertically */
+    margin: auto; /* Auto margins for horizontal centering */
+    max-width: 1000px; /* Maximum width of the container */
+    width: 80vw; /* Default width */
+    min-height: 100vh; /* Optional: if you want the content to be at least the height of the viewport */
+    padding: 20px; /* Optional: if you want some padding inside the container */
+    box-sizing: border-box; /* Include padding in the width calculation */
+}
+
+#main-content > section {
+    width: 100%; /* Ensure the section takes up the full width of its parent */
 }
 
 header {
@@ -129,7 +139,7 @@ header {
     display: grid;
     margin: auto;
     padding: 0.2rem;
-    width: 80vw;
+    width: 100%;
     max-height: 80vh;
     grid-template-rows: repeat(3, 1fr);
     /* 3 rows of equal height */
