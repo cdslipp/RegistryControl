@@ -17,6 +17,7 @@ Features
 -   Help Dashboard: A dedicated dashboard for help topics.
 -   Contact Information: Display essential contact information for assistance.
 -   Date and Rental Type Display: Show current date and the rental type of the theatre.
+-   Bitfocus Companion Integration: Utilizes the Bitfocus Companion server to enable remote triggering of devices within the theatre. This includes a new `CompanionButton` component which allows for sending commands to the Companion server via button presses, currently used for toggling house lights with potential for much more complex interactions in future updates.
 
 ### In-Progress Features
 
