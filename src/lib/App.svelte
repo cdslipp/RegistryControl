@@ -6,6 +6,7 @@
 	import { fetchLightLevels } from '$lib/lx/lxApi';
 	import { get, writable } from 'svelte/store';
 	import CompanionButton from '$lib/companion/CompanionButton.svelte';
+	import Nav from './Nav.svelte';
 
 	const lightLevels = writable({});
 
@@ -25,7 +26,7 @@
 		return () => clearInterval(interval);
 	});
 </script>
-
+<Nav />
 <section id="main-grid">
 	<button id="showModeButton">
 		<h2>Show Mode</h2>
