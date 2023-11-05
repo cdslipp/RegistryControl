@@ -8,7 +8,7 @@ export async function sendCompanionCommand(page, button) {
         throw new Error(`Error pressing button ${button} on page ${page}: ${response.statusText}`);
     }
 
-    console.log(response);
+    console.log("Response from bitfocus", response);
 
     return response.json(); // or just return response, if no JSON is expected
 }
