@@ -5,7 +5,7 @@
 
 	export let lightSetName;
 
-    /** @type {string} */
+	/** @type {string} */
 	export let label;
 
 	const debouncedUpdateLightLevel = debounce(updateLightLevel, 200); // Adjust the delay as needed
@@ -13,7 +13,7 @@
 	// A reactive statement at the top level of your script, not inside onMount
 	$: if (lightSetName && typeof window !== 'undefined') {
 		debouncedUpdateLightLevel($percentage);
-        console.log(`[onMount] Setting up light level for ${lightSetName}`);
+		console.log(`[onMount] Setting up light level for ${lightSetName}`);
 	}
 
 	onDestroy(() => {
@@ -58,7 +58,7 @@
 	async function updateLightLevel(level) {
 		try {
 			console.log(`Updating light level for ${lightSetName} to ${level}`);
-            const response = await fetch('/lights/setLevels', {
+			const response = await fetch('/lights/setLevels', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
@@ -117,32 +117,38 @@
 			percentage.set(newPercentage);
 		}
 	}
-
 </script>
 
 <svelte:window bind:scrollY />
 
-<div
-	class="slider-container"
-	on:scroll={onScroll}
-	on:click={() => updateFill($percentage === 0 ? 100 : 0)}
-	bind:clientHeight={containerHeight}
-	role="slider"
->
+<div class="slider-wrapper">
 	<div class="slider-labels">
 		<h3>{label}</h3>
 		<span>{$percentage.toFixed(0)}%</span>
 	</div>
-	<div class="slider-content" bind:clientHeight={contentHeight}>
-		<div class="slider-fill" style="height: {Math.max(1, $percentage)}%" />
+	<div
+		class="slider-container"
+		on:scroll={onScroll}
+		on:click={() => updateFill($percentage === 0 ? 100 : 0)}
+		bind:clientHeight={containerHeight}
+		role="slider"
+	>
+		<div class="slider-content" bind:clientHeight={contentHeight}>
+			<div class="slider-fill" style="height: {Math.max(1, $percentage)}%" />
+		</div>
 	</div>
 </div>
 
 <style>
+	.slider-wrapper{
+		
+	}
 	.slider-container {
 		position: relative;
-		overflow-y: auto;
-		height: 400px;
+		overflow-y: scroll;
+		grid-column: 3;
+		grid-row: 2 / span 2;
+		height: 100%;
 		width: 100%;
 		background-color: var(--SliderColor);
 		border-radius: 1.5rem;
@@ -154,7 +160,8 @@
 
 	.slider-content {
 		position: relative;
-		height: 425px; /* This determines how much the user can scroll */
+		border: 20px solid;
+		height: 150%;
 	}
 
 	.slider-fill {
@@ -167,12 +174,18 @@
 
 	.slider-labels {
 		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
+		background-color: orange;
+		width: 100%;
+		height: 100%;
 		z-index: 10; /* Ensures labels stay on top */
 		color: white;
 		pointer-events: none;
+	}
+
+	.slider-labels h3 {
+		color: var(--button-text);
+		font-family: sans-serif;
+		scroll-behavior: none;
 	}
 
 	/* Other existing styles remain unchanged */

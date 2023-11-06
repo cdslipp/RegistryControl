@@ -29,7 +29,7 @@
 <Nav />
 <section id="main-grid">
 	<button id="showModeButton">
-		<h2>Show Mode</h2>
+		<h2>SHOW MODE</h2>
 	</button>
 	<CompanionButton
 		page={1}
@@ -46,7 +46,52 @@
 	<button id="help-button">
 		<a href="/help"><h3>Help</h3></a>
 	</button>
-	<button id="lx-button">
-		<h3>More Lx</h3>
-	</button>
 </section>
+
+<style>
+#main-grid {
+    display: grid;
+    margin: auto;
+    padding: 0.2rem;
+    width: 100%;
+    height: 70dvh;
+    grid-template-rows: repeat(3, 1fr);
+    /* 3 rows of equal height */
+    grid-template-columns: repeat(3, 1fr);
+    /* 3 columns of equal width */
+    grid-gap: 0.8em;
+    /* Space between grid items */
+}
+
+#main-grid button {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding: 0.2rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 1.5rem;
+}
+
+#showModeButton {
+    grid-column: 1 / span 2;
+    font-size: 3rem;
+    background-color: var(--orange);
+}
+
+/* Grid positioning */
+
+#projector-button {
+    grid-column: 1 / span 2;
+    background-color: var(--blue);
+    /* Span across 2 columns */
+}
+
+#help-button {
+    background-color: var(--yellow);
+}
+
+#lx-button {
+    background-color: var(--blue);
+}
+</style>

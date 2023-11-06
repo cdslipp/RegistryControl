@@ -14,8 +14,9 @@
 body {
     background-color: var(--primary-bg);
     width: 100%;
-    height: 100%;
+    height: 100dvh;
     color: white;
+    margin: 0px;
 }
 
 /* APPLY THIS TO STOP SCROLLING */
@@ -95,29 +96,12 @@ button h2{
     margin: auto; /* Auto margins for horizontal centering */
     max-width: 1000px; /* Maximum width of the container */
     width: 80vw; /* Default width */
-    min-height: 100vh; /* Optional: if you want the content to be at least the height of the viewport */
     padding: 20px; /* Optional: if you want some padding inside the container */
     box-sizing: border-box; /* Include padding in the width calculation */
 }
 
 #main-content > section {
     width: 100%; /* Ensure the section takes up the full width of its parent */
-}
-
-header {
-    display: flex;
-    flex-direction: column;
-    margin-top: 0px;
-    padding: 1rem;
-    width: 75vw;
-    background-color: var(--primary-bg);
-    margin: auto;
-}
-
-#header-info {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
 }
 
 #main-flex {
@@ -135,48 +119,3 @@ header {
     padding: 2rem;
 }
 
-#main-grid {
-    display: grid;
-    margin: auto;
-    padding: 0.2rem;
-    width: 100%;
-    max-height: 80vh;
-    grid-template-rows: repeat(3, 1fr);
-    /* 3 rows of equal height */
-    grid-template-columns: repeat(3, 1fr);
-    /* 3 columns of equal width */
-    grid-gap: 0.3em;
-    /* Space between grid items */
-}
-
-#main-grid button {
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    padding: 0.2rem;
-    align-items: center;
-    justify-content: center;
-    border-radius: 1.5rem;
-}
-
-#showModeButton {
-    grid-column: 1 / span 2;
-    font-size: 3rem;
-    background-color: var(--orange);
-}
-
-/* Grid positioning */
-
-#projector-button {
-    grid-column: 1 / span 2;
-    background-color: var(--blue);
-    /* Span across 2 columns */
-}
-
-#help-button {
-    background-color: var(--yellow);
-}
-
-#lx-button {
-    background-color: var(--blue);
-}
