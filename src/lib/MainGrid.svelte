@@ -39,7 +39,7 @@
 	<button id="projector-button">
 		<h2>Projector</h2>
 	</button>
-	<LxSlider lightSetName="house" label="House Lights" />
+	<LxSlider lightSetName="house" label="HOUSE LIGHTS" />
 	<button id="video-button">
 		<a href="/video"><h3>Video</h3></a>
 	</button>

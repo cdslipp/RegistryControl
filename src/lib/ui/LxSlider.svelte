@@ -141,16 +141,19 @@
 
 <style>
 	.slider-wrapper{
-		
-	}
-	.slider-container {
 		position: relative;
-		overflow-y: scroll;
 		grid-column: 3;
 		grid-row: 2 / span 2;
 		height: 100%;
 		width: 100%;
+		border-radius: 1.5rem;
 		background-color: var(--SliderColor);
+	}
+	.slider-container {
+		overflow-y: scroll;
+		height:100%;
+		width:100%;
+		scroll-behavior: smooth;
 		border-radius: 1.5rem;
 	}
 
@@ -160,7 +163,6 @@
 
 	.slider-content {
 		position: relative;
-		border: 20px solid;
 		height: 150%;
 	}
 
@@ -174,19 +176,33 @@
 
 	.slider-labels {
 		position: absolute;
-		background-color: orange;
 		width: 100%;
 		height: 100%;
 		z-index: 10; /* Ensures labels stay on top */
 		color: white;
 		pointer-events: none;
+		scroll-behavior: none;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		align-items: center;
 	}
 
 	.slider-labels h3 {
 		color: var(--button-text);
 		font-family: sans-serif;
+		font-size: 2rem;
 		scroll-behavior: none;
+		text-align: center;
+		width: 50%;
 	}
 
-	/* Other existing styles remain unchanged */
+	.slider-labels span{
+		color: var(--button-text);
+		font-family: var(--main-font);
+		font-weight: 200;
+		font-size: 3.8rem;
+
+	}
+
 </style>
