@@ -54,7 +54,8 @@
     margin: auto;
     padding: 0.2rem;
     width: 100%;
-    height: 70dvh;
+    min-height: 60dvh;
+    max-height: 70dvh;
     grid-template-rows: repeat(3, 1fr);
     /* 3 rows of equal height */
     grid-template-columns: repeat(3, 1fr);

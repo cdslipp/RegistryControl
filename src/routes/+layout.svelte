@@ -9,10 +9,6 @@
         <section>
             <slot/>
         </section>
-        <footer>
-            <p>Made by Cameron Slipp</p>
-        </footer>
-      
     </div>
 </div>
 

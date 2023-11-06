@@ -1,7 +1,8 @@
 <script>
 	import { rentalType } from '$lib/stores';
 
-	export let mainHeader = 'Welcome to the Registry'; // Default value if not provided
+	export let headerLine1 = 'Welcome'; // Default value if not provided
+	export let headerLine2 = 'to the Registry.'; // Default value if not provided
 
 	let dateObj = new Date();
 	/** @type {Intl.DateTimeFormatOptions} */
@@ -27,7 +28,10 @@
 	<div id="logo-container">
 		<img src="/registry_logo.png" alt="Theatre Logo" id="theatre-logo" />
 	</div>
-	<h1>{mainHeader}</h1>
+	<div id="header-text">
+		<h1>{headerLine1}</h1>
+	<h1>{headerLine2}</h1>
+	</div>
 	<!-- Use the mainHeader prop here -->
 	<div id="header-info">
 		<p>{currentRentalType}</p>
@@ -42,8 +46,13 @@
 		align-items: center;
 		margin-top: 0px;
 		padding: 1rem 1rem 0 1rem;
-		width: 75vw;
+		width: auto;
 		background-color: var(--primary-bg);
+	}
+
+	#header-text{
+		align-items: left;
+		width: 100%;
 	}
 
 	#header-info {
@@ -56,7 +65,7 @@
 	}
 
 	#theatre-logo {
-		width: 5dvw;
+		width: 80px;
 		height: auto;
 		object-fit: contain;
 	}

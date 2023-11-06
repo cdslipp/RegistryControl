@@ -155,6 +155,7 @@
 		width:100%;
 		scroll-behavior: smooth;
 		border-radius: 1.5rem;
+		padding: 0px;
 	}
 
 	.slider-container::-webkit-scrollbar {
@@ -163,14 +164,18 @@
 
 	.slider-content {
 		position: relative;
+		scroll-behavior: smooth;
 		height: 150%;
+		padding: 0px;
 	}
 
 	.slider-fill {
 		position: absolute;
+		height: 100%;
 		bottom: 0;
 		left: 0;
 		right: 0;
+		padding: 0px;
 		background-color: var(--OnColor);
 	}
 
@@ -190,18 +195,18 @@
 
 	.slider-labels h3 {
 		color: var(--button-text);
-		font-family: sans-serif;
+		font-family: var(--main-font);
 		font-size: 2rem;
 		scroll-behavior: none;
 		text-align: center;
-		width: 50%;
 	}
 
 	.slider-labels span{
 		color: var(--button-text);
 		font-family: var(--main-font);
 		font-weight: 200;
-		font-size: 3.8rem;
+		font-size: 3.2rem;
+		padding-bottom: 1rem;
 
 	}
 

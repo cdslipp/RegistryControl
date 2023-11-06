@@ -29,14 +29,15 @@ body {
 }
 
 h1 {
-    font-family: Sans-serif;
-    font-size: 3rem;
+    font-family: var(--main-font);
+    font-size: 4.2rem;
+    font-weight: 700;
     color: var(--primary-text);
     margin: 0px;
 }
 
 h2 {
-    font-family: Sans-serif;
+    font-family: var(--main-font);
     color: var(--primary-text);
     font-size: 2rem;
     font-weight: bold;
@@ -95,7 +96,7 @@ button h2{
     justify-content: center;
     align-items: center; /* Align items vertically */
     margin: auto; /* Auto margins for horizontal centering */
-    max-width: 1000px; /* Maximum width of the container */
+    max-width: 777px; /* Maximum width of the container */
     width: 80vw; /* Default width */
     padding: 20px; /* Optional: if you want some padding inside the container */
     box-sizing: border-box; /* Include padding in the width calculation */
