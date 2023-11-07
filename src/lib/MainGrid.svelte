@@ -1,5 +1,6 @@
 <script>
 	import ToggleButton from './ui/ToggleButton.svelte';
+	import { toggleShowMode } from '$lib/db/showmode';
 	import LxSlider from './ui/LxSlider.svelte';
 	import { onMount } from 'svelte';
 	import { activeSliders } from '$lib/lx/lxStores';
@@ -26,73 +27,87 @@
 		return () => clearInterval(interval);
 	});
 </script>
+
 <Nav />
 <section id="main-grid">
-	<button id="showModeButton">
+	<button id="showModeButton" on:click={toggleShowMode}>
 		<h2>SHOW MODE</h2>
 	</button>
-	<CompanionButton
-		page={1}
-		button={1}
-		isToggle={true}
-	/>
-	<button id="projector-button">
-		<h2>Projector</h2>
-	</button>
+	<CompanionButton page={1} button={1} isToggle={true} />
+	<a href="/lights" class="nav-button" id="lighting-button">
+		<div>
+			<h2>LIGHTING</h2>
+		</div>
+	</a>
 	<LxSlider lightSetName="house" label="HOUSE LIGHTS" />
-	<button id="video-button">
-		<a href="/video"><h3>Video</h3></a>
-	</button>
-	<button id="help-button">
-		<a href="/help"><h3>Help</h3></a>
-	</button>
+	<a href="/help" id="help-button" class="nav-button">
+		<div>
+			<h2>HELP</h2>
+		</div>
+	</a>
+	<a href="/video" id="video-button" class="nav-button">
+		<div>
+			<h2>VIDEO</h2>
+		</div>
+	</a>
 </section>
 
 <style>
-#main-grid {
-    display: grid;
-    margin: auto;
-    padding: 0.2rem;
-    width: 100%;
-    min-height: 60dvh;
-    max-height: 70dvh;
-    grid-template-rows: repeat(3, 1fr);
-    /* 3 rows of equal height */
-    grid-template-columns: repeat(3, 1fr);
-    /* 3 columns of equal width */
-    grid-gap: 0.8em;
-    /* Space between grid items */
-}
+	#main-grid {
+		display: grid;
+		margin: auto;
+		padding: 0.2rem;
+		width: 100%;
+		min-height: 60vh;
+		max-height: 70vh;
+		grid-template-rows: repeat(3, 1fr);
+		grid-template-columns: repeat(3, 1fr);
+		grid-gap: 0.8em;
+	}
 
-#main-grid button {
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    padding: 0.2rem;
-    align-items: center;
-    justify-content: center;
-    border-radius: 1.5rem;
-}
+	#main-grid a {
+		text-decoration: none; /* Remove default link styling */
+	}
 
-#showModeButton {
-    grid-column: 1 / span 2;
-    font-size: 3rem;
-    background-color: var(--orange);
-}
+	#main-grid a > div {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		border-radius: 1.5rem;
+		padding: 0.2rem;
+		position: relative;
+		height: 100%; /* Ensure the div fills the a element for the clickable area */
+		box-sizing: border-box; /* So padding doesn't affect the final size */
+	}
 
-/* Grid positioning */
+	#showModeButton {
+		grid-column: 1 / span 2;
+		font-size: 3rem;
+		background-color: var(--orange);
+		border-radius: var(--border-radius);
+	}
 
-#projector-button {
-    grid-column: 1 / span 2;
-    background-color: var(--blue);
-    /* Span across 2 columns */
-}
+	.nav-button {
+		border-radius: var(--border-radius);
+		text-decoration: none;
+	}
 
-#help-button {
-    background-color: var(--yellow);
-}
+	.nav-button h2 {
+		color: var(--button-text);
+	}
 
-#lx-button {
-    background-color: var(--blue);
-}
+	#lighting-button {
+		background-color: var(--blue);
+		border-radius: var(--border-radius);
+		grid-column: 1 / span 2;
+	}
+
+	#help-button {
+		background-color: var(--yellow);
+	}
+
+	#video-button {
+		background-color: var(--blue);
+	}
 </style>

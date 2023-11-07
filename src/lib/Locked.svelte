@@ -2,15 +2,10 @@
 	import Nav from './Nav.svelte';
 </script>
 
-<Nav mainHeader="Show in progress." />
+<Nav headerLine1="Show in progress." headerLine2=""/>
 <div class="locked-out">
 	<img src="lock.svg" class="lock-icon" alt="Lock icon" />
-	<h2>Show in progress.</h2>
-	<div class="message">
-		<p>Standard Rental</p>
-		<p>Wed, Aug 8, 2023</p>
-	</div>
-	<button class="unlock-button">UNLOCK</button>
+	<a href="/pin" class="unlock-button">UNLOCK</a>
 </div>
 
 <style>
@@ -19,8 +14,7 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		height: 100vh; /* Full viewport height */
-		background-color: black;
+		height: 60dvh; /* Full viewport height */
 		color: white;
 		font-family: 'Arial', sans-serif; /* Example font */
 	}
@@ -36,11 +30,12 @@
 	.unlock-button {
 		background-color: orange;
 		border: none;
-		padding: 1rem 2rem;
+		padding: 2rem;
+		width: 30%;
 		font-size: 1.2rem;
 		color: white;
 		cursor: pointer;
-		border-radius: 8px; /* Rounded corners */
+		border-radius: var(--border-radius); /* Rounded corners */
 	}
 
 	/* Adjust button on hover */
