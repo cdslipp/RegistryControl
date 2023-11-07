@@ -1,5 +1,4 @@
 <script>
-	import ToggleButton from './ui/ToggleButton.svelte';
 	import { toggleShowMode } from '$lib/db/showmode';
 	import LxSlider from './ui/LxSlider.svelte';
 	import { onMount } from 'svelte';

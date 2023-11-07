@@ -24,13 +24,10 @@
 	  }
 	}
   </script>
-
-  
-  
   
 
 {#if $showMode}
   <Locked />
-{:else}
+{:else if !$showMode}
 <MainGrid />
 {/if}
