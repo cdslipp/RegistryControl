@@ -1,7 +1,10 @@
 <script>
-	import { rentalType } from "$lib/stores"
+	import { rentalType } from '$lib/stores';
 
-  let dateObj = new Date();
+	export let headerLine1 = 'Welcome'; // Default value if not provided
+	export let headerLine2 = 'to the Registry.'; // Default value if not provided
+
+	let dateObj = new Date();
 	/** @type {Intl.DateTimeFormatOptions} */
 	let options = {
 		weekday: 'long',
@@ -15,26 +18,55 @@
 		.slice(0, 2)
 		.join(', ');
 
-    let currentRentalType;
-    rentalType.subscribe(value => {
-        currentRentalType = value;
-    });
+	let currentRentalType;
+	rentalType.subscribe((value) => {
+		currentRentalType = value;
+	});
 </script>
 
-<div id="logo-container">
-  <img src="/registry_logo.png" alt="Theatre Logo" id="theatre-logo">
-</div>
-<h1>Welcome to the Registry.</h1>
-<div id="header-info">
-	<p>{currentRentalType}</p>
-    <p>{currentDate}</p>
-</div>
+<header>
+	<div id="logo-container">
+		<img src="/registry_logo.png" alt="Theatre Logo" id="theatre-logo" />
+	</div>
+	<div id="header-text">
+		<h1>{headerLine1}</h1>
+	<h1>{headerLine2}</h1>
+	</div>
+	<!-- Use the mainHeader prop here -->
+	<div id="header-info">
+		<p>{currentRentalType}</p>
+		<p>{currentDate}</p>
+	</div>
+</header>
 
 <style>
-  #theatre-logo {
-    width: 150px;
-    height: auto;
-    object-fit: contain;
-  }
+	header {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		margin-top: 0px;
+		padding: 1rem 1rem 0 1rem;
+		width: auto;
+		background-color: var(--primary-bg);
+	}
 
+	#header-text{
+		align-items: left;
+		width: 100%;
+	}
+
+	#header-info {
+		width: 100%;
+		font-size: medium;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		padding-bottom: 0px;
+	}
+
+	#theatre-logo {
+		width: 80px;
+		height: auto;
+		object-fit: contain;
+	}
 </style>

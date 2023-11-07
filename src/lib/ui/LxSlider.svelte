@@ -5,7 +5,7 @@
 
 	export let lightSetName;
 
-    /** @type {string} */
+	/** @type {string} */
 	export let label;
 
 	const debouncedUpdateLightLevel = debounce(updateLightLevel, 200); // Adjust the delay as needed
@@ -13,7 +13,7 @@
 	// A reactive statement at the top level of your script, not inside onMount
 	$: if (lightSetName && typeof window !== 'undefined') {
 		debouncedUpdateLightLevel($percentage);
-        console.log(`[onMount] Setting up light level for ${lightSetName}`);
+		console.log(`[onMount] Setting up light level for ${lightSetName}`);
 	}
 
 	onDestroy(() => {
@@ -58,7 +58,7 @@
 	async function updateLightLevel(level) {
 		try {
 			console.log(`Updating light level for ${lightSetName} to ${level}`);
-            const response = await fetch('/lights/setLevels', {
+			const response = await fetch('/lights/setLevels', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
@@ -117,35 +117,45 @@
 			percentage.set(newPercentage);
 		}
 	}
-
 </script>
 
 <svelte:window bind:scrollY />
 
-<div
-	class="slider-container"
-	on:scroll={onScroll}
-	on:click={() => updateFill($percentage === 0 ? 100 : 0)}
-	bind:clientHeight={containerHeight}
-	role="slider"
->
+<div class="slider-wrapper">
 	<div class="slider-labels">
 		<h3>{label}</h3>
 		<span>{$percentage.toFixed(0)}%</span>
 	</div>
-	<div class="slider-content" bind:clientHeight={contentHeight}>
-		<div class="slider-fill" style="height: {Math.max(1, $percentage)}%" />
+	<div
+		class="slider-container"
+		on:scroll={onScroll}
+		on:click={() => updateFill($percentage === 0 ? 100 : 0)}
+		bind:clientHeight={containerHeight}
+		role="slider"
+	>
+		<div class="slider-content" bind:clientHeight={contentHeight}>
+			<div class="slider-fill" style="height: {Math.max(1, $percentage)}%" />
+		</div>
 	</div>
 </div>
 
 <style>
-	.slider-container {
+	.slider-wrapper{
 		position: relative;
-		overflow-y: auto;
-		height: 400px;
+		grid-column: 3;
+		grid-row: 2 / span 2;
+		height: 100%;
 		width: 100%;
-		background-color: var(--SliderColor);
 		border-radius: 1.5rem;
+		background-color: var(--SliderColor);
+	}
+	.slider-container {
+		overflow-y: scroll;
+		height:100%;
+		width:100%;
+		scroll-behavior: smooth;
+		border-radius: 1.5rem;
+		padding: 0px;
 	}
 
 	.slider-container::-webkit-scrollbar {
@@ -154,26 +164,50 @@
 
 	.slider-content {
 		position: relative;
-		height: 425px; /* This determines how much the user can scroll */
+		scroll-behavior: smooth;
+		height: 150%;
+		padding: 0px;
 	}
 
 	.slider-fill {
 		position: absolute;
+		height: 100%;
 		bottom: 0;
 		left: 0;
 		right: 0;
+		padding: 0px;
 		background-color: var(--OnColor);
 	}
 
 	.slider-labels {
 		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
+		width: 100%;
+		height: 100%;
 		z-index: 10; /* Ensures labels stay on top */
 		color: white;
 		pointer-events: none;
+		scroll-behavior: none;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		align-items: center;
 	}
 
-	/* Other existing styles remain unchanged */
+	.slider-labels h3 {
+		color: var(--button-text);
+		font-family: var(--main-font);
+		font-size: 2rem;
+		scroll-behavior: none;
+		text-align: center;
+	}
+
+	.slider-labels span{
+		color: var(--button-text);
+		font-family: var(--main-font);
+		font-weight: 200;
+		font-size: 3.2rem;
+		padding-bottom: 1rem;
+
+	}
+
 </style>
