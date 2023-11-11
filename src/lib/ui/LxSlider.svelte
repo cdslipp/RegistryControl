@@ -121,7 +121,7 @@
 
 <svelte:window bind:scrollY />
 
-<div class="slider-wrapper">
+<div id="{lightSetName}-slider" class="slider-wrapper">
 	<div class="slider-labels">
 		<h3>{label}</h3>
 		<span>{$percentage.toFixed(0)}%</span>
@@ -142,7 +142,6 @@
 <style>
 	.slider-wrapper{
 		position: relative;
-		grid-column: 3;
 		grid-row: 2 / span 2;
 		height: 100%;
 		width: 100%;

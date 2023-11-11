@@ -23,7 +23,8 @@
 
 <button on:click={handlePress} class:active={isToggle && on}>
     {#if isToggle}
-        <span>{on ? 'ON' : 'OFF'}</span>
+    <h4>WORK LIGHTS</h4>
+        <h2>{on ? 'ON' : 'OFF'}</h2>
     {:else}
         <span>PRESS</span>
     {/if}
@@ -31,15 +32,15 @@
 
 <style>
     button {
-        background-color: red;
-        color: white;
+        background-color: var(--OffColor);
         border: none;
         padding: 8px 16px;
-        border-radius: 4px;
+        border-radius: var(--border-radius);
         cursor: pointer;
         transition: background-color 0.3s;
+
     }
     button.active {
-        background-color: green;
+        background-color: var(--OnColor);
     }
 </style>

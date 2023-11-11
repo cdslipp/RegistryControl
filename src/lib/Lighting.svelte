@@ -29,26 +29,17 @@
 
 <Nav />
 <section id="main-grid">
-	<button id="showModeButton" on:click={toggleShowMode}>
-		<h2>SHOW MODE</h2>
-	</button>
-	<CompanionButton page={1} button={1} isToggle={true} />
-	<a href="/lights" class="nav-button" id="lighting-button">
+	<a href="/" id="back-button" class="nav-button default-button">
 		<div>
-			<h2>LIGHTING</h2>
+            <h2>←</h2>
 		</div>
 	</a>
-	<LxSlider lightSetName="house" label="HOUSE LIGHTS" />
-	<a href="/help" id="help-button" class="nav-button">
-		<div>
-			<h2>HELP</h2>
-		</div>
-	</a>
-	<a href="/video" id="video-button" class="nav-button">
-		<div>
-			<h2>VIDEO</h2>
-		</div>
-	</a>
+		<CompanionButton page={1} button={2} label="CENTRE STAGE SPOT" />
+		<CompanionButton page={1} button={3} label="RESTORE BOARD CONTROL" />
+		<LxSlider lightSetName="front" label="FRONT LIGHT" bind:level={$lightLevels.front} />
+		<LxSlider lightSetName="side" label="SIDE LIGHTS" bind:level={$lightLevels.side} />
+		<LxSlider lightSetName="top" label="TOP LIGHTS" bind:level={$lightLevels.top} />
+
 </section>
 
 <style>
@@ -96,6 +87,10 @@
 		color: var(--button-text);
 	}
 
+    .default-button {
+        background-color: var(--default-buttons);
+    }
+
 	#lighting-button {
 		background-color: var(--blue);
 		border-radius: var(--border-radius);
@@ -109,9 +104,4 @@
 	#video-button {
 		background-color: var(--blue);
 	}
-
-	:global(#house-slider) {
-		grid-column: 3;
-	}
-
 </style>
