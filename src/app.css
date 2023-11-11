@@ -72,6 +72,10 @@ button h2{
     color: var(--primary-bg);
 }
 
+.default-button {
+    background-color: var(--default-buttons);
+}
+
 .on-button {
     background-color: var(--OnColor);
     /* pastel green */

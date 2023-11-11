@@ -22,12 +22,12 @@
 						console.error('Failed to fetch light levels:', error);
 					});
 			}
-		}, 5000); // Poll every 5 seconds
+		}, 500); // Poll every 5 seconds
 		return () => clearInterval(interval);
 	});
 </script>
 
-<Nav />
+<Nav headerLine1="Lighting Control" headerLine2=""/>
 <section id="main-grid">
 	<a href="/" id="back-button" class="nav-button default-button">
 		<div>
@@ -86,10 +86,6 @@
 	.nav-button h2 {
 		color: var(--button-text);
 	}
-
-    .default-button {
-        background-color: var(--default-buttons);
-    }
 
 	#lighting-button {
 		background-color: var(--blue);

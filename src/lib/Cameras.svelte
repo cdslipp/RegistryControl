@@ -1,20 +1,42 @@
 <script>
-	import Nav from '$lib/Nav.svelte';
+	import { toggleShowMode } from '$lib/db/showmode';
+	import LxSlider from './ui/LxSlider.svelte';
+	import { onMount } from 'svelte';
+	import { activeSliders } from '$lib/lx/lxStores';
+	import { fetchLightLevels } from '$lib/lx/lxApi';
+	import { get, writable } from 'svelte/store';
+	import CompanionButton from '$lib/companion/CompanionButton.svelte';
+	import Nav from './Nav.svelte';
 
+	const lightLevels = writable({});
+
+	onMount(() => {
+		const interval = setInterval(() => {
+			const sliders = get(activeSliders);
+			if (sliders.length > 0) {
+				fetchLightLevels()
+					.then((levels) => {
+						lightLevels.set(levels);
+					})
+					.catch((error) => {
+						console.error('Failed to fetch light levels:', error);
+					});
+			}
+		}, 500); // Poll every 5 seconds
+		return () => clearInterval(interval);
+	});
 </script>
 
-<Nav headerLine1="Projector or Cams?" headerLine2=""/>
+<Nav headerLine1="Camera" headerLine2="Control Panel"/>
 <section id="main-grid">
-	<a href="/video/projector" class="nav-button default-button">
+	<a href="/" id="back-button" class="nav-button default-button">
 		<div>
-			<h2>Projector</h2>
+            <h2>←</h2>
 		</div>
 	</a>
-	<a href="/video/cameras" class="nav-button default-button">
-		<div>
-			<h2>Cameras</h2>
-		</div>
-	</a>
+		<CompanionButton page={1} button={2} label="CENTRE STAGE SPOT" />
+		<CompanionButton page={1} button={3} label="RESTORE BOARD CONTROL" />
+
 </section>
 
 <style>
@@ -75,9 +97,4 @@
 	#video-button {
 		background-color: var(--blue);
 	}
-
-	:global(#house-slider) {
-		grid-column: 3;
-	}
-
 </style>
