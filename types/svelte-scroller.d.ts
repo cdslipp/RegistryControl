@@ -1,5 +1,5 @@
 /**
- * @typedef {import('./types/svelte-scroller').ScrollerProps} ScrollerProps
+ * @ {import('./types/svelte-scroller').ScrollerProps} ScrollerProps
  */
 
 declare module '@sveltejs/svelte-scroller';

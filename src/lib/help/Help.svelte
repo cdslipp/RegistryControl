@@ -1,15 +1,16 @@
 <script>
-    // Sample help topics for demonstration purposes
-    const helpTopics = [
-        { title: 'Topic 1', content: 'Content for topic 1' },
-        { title: 'Topic 2', content: 'Content for topic 2' },
-        // ... Add more topics as needed
-    ];
+	import { fetchMarkdownPosts } from "./getHelpPosts";
 
-    function showHelpArticle(topic) {
-        // Here you can display the article in a modal or another component
-        alert(topic.content);
-    }
+    // Sample help topics for demonstration purposes
+
+
+    // console.log(helpArticles);
+    // const helpTopics = [
+    //     { title: 'Topic 1', content: 'Content for topic 1' },
+    //     { title: 'Topic 2', content: 'Content for topic 2' },
+    //     // ... Add more topics as needed
+    // ];
+
 </script>
 
 <style>

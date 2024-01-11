@@ -37,8 +37,8 @@
 		<CompanionButton page={1} button={2} label="CENTRE STAGE SPOT" />
 		<CompanionButton page={1} button={3} label="RESTORE BOARD CONTROL" />
 		<LxSlider lightSetName="front" label="FRONT LIGHT" bind:level={$lightLevels.front} />
-		<LxSlider lightSetName="side" label="SIDE LIGHTS" bind:level={$lightLevels.side} />
-		<LxSlider lightSetName="top" label="TOP LIGHTS" bind:level={$lightLevels.top} />
+		<LxSlider lightSetName="sides" label="SIDE LIGHTS" bind:level={$lightLevels.side} />
+		<LxSlider lightSetName="tops" label="TOP LIGHTS" bind:level={$lightLevels.top} />
 
 </section>
 

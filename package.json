@@ -37,6 +37,7 @@
     "croner": "^7.0.4",
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
+    "mdsvex": "^0.11.0",
     "pocketbase": "^0.19.0",
     "svelte-markdown": "^0.4.0",
     "xml-js": "^1.6.11"
