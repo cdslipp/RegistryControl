@@ -25,12 +25,15 @@
 	const percentage = writable(0);
 	let containerHeight = 0;
 	let contentHeight = 0;
+	let initialFillBottom = 0;
 	let scrollY = 0;
 
 	onMount(async () => {
 		if (lightSetName) {
 			getLightLevels(lightSetName);
 		}
+		initialFillBottom = calculateInitialFillBottom();
+		console.log('Height calculation:', { containerHeight, contentHeight, initialFillBottom });
 	});
 
 	// Function to fetch the initial light levels from the server
@@ -84,39 +87,45 @@
 
 	function onScroll(event) {
 		const scrolled = event.currentTarget.scrollTop;
-		const maxScroll = contentHeight - containerHeight;
-		const newPercentage = (scrolled / maxScroll) * 100;
+		console.log('Scroll position:', scrolled);
+		const scrollableHeight = (contentHeight - containerHeight) * 2; // Total scrollable height
+		console.log('Scrollable height:', scrollableHeight);
+		const newPercentage = Math.min(100, Math.max(0, (scrolled / scrollableHeight) * 100));
 		percentage.set(newPercentage);
 	}
 
-	function updateFill(newPercentage) {
-		const currentPercentage = $percentage;
-		const difference = Math.abs(currentPercentage - newPercentage);
-
-		// If the jump is significant, animate the transition
-		if (difference > 5) {
-			const duration = 500; // Duration of the animation in milliseconds
-			const start = Date.now();
-
-			const animate = () => {
-				const timePassed = Date.now() - start;
-				const progress = timePassed / duration;
-
-				if (progress < 1) {
-					const updatedPercentage =
-						currentPercentage + (newPercentage - currentPercentage) * progress;
-					percentage.set(updatedPercentage);
-					requestAnimationFrame(animate);
-				} else {
-					percentage.set(newPercentage);
-				}
-			};
-
-			requestAnimationFrame(animate);
-		} else {
-			percentage.set(newPercentage);
-		}
+	function calculateInitialFillBottom() {
+		// Calculate the initial position based on the actual heights
+		return contentHeight - containerHeight; // Adjust this calculation as needed
 	}
+
+	function updateFill(newPercentage) {
+    const duration = 500; // Duration of the animation in milliseconds
+    const start = Date.now();
+
+    const scrollableHeight = (contentHeight - containerHeight) * 2;
+    const targetScrollTop = (newPercentage / 100) * scrollableHeight;
+    const currentScrollTop = document.querySelector('.slider-container').scrollTop;
+    const distanceToScroll = targetScrollTop - currentScrollTop;
+
+    const animateScroll = () => {
+        const timePassed = Date.now() - start;
+        const progress = Math.min(timePassed / duration, 1); // Ensure progress doesn't exceed 1
+
+        const scrollTop = currentScrollTop + (distanceToScroll * progress);
+        document.querySelector('.slider-container').scrollTop = scrollTop;
+
+        if (progress < 1) {
+            requestAnimationFrame(animateScroll);
+        } else {
+            percentage.set(newPercentage); // Update the percentage at the end of the animation
+        }
+    };
+
+    requestAnimationFrame(animateScroll);
+}
+
+
 </script>
 
 <svelte:window bind:scrollY />
@@ -134,13 +143,16 @@
 		role="slider"
 	>
 		<div class="slider-content" bind:clientHeight={contentHeight}>
-			<div class="slider-fill" style="height: {Math.max(1, $percentage)}%" />
+			<div
+				class="slider-fill"
+				style="height: {containerHeight}px; bottom: -{initialFillBottom}px"
+			/>
 		</div>
 	</div>
 </div>
 
 <style>
-	.slider-wrapper{
+	.slider-wrapper {
 		position: relative;
 		grid-row: 2 / span 2;
 		height: 100%;
@@ -150,8 +162,9 @@
 	}
 	.slider-container {
 		overflow-y: scroll;
-		height:100%;
-		width:100%;
+		/* overflow: visible; */
+		height: 100%;
+		width: 100%;
 		scroll-behavior: smooth;
 		border-radius: 1.5rem;
 		padding: 0px;
@@ -162,16 +175,18 @@
 	}
 
 	.slider-content {
+		overflow: visible;
+		border: solid orange;
 		position: relative;
 		scroll-behavior: smooth;
 		height: 150%;
 		padding: 0px;
+		border: solid orange;
 	}
 
 	.slider-fill {
 		position: absolute;
-		height: 100%;
-		bottom: 0;
+		/* bottom: -193px; */
 		left: 0;
 		right: 0;
 		padding: 0px;
@@ -200,13 +215,11 @@
 		text-align: center;
 	}
 
-	.slider-labels span{
+	.slider-labels span {
 		color: var(--button-text);
 		font-family: var(--main-font);
 		font-weight: 200;
 		font-size: 3.2rem;
 		padding-bottom: 1rem;
-
 	}
-
 </style>
