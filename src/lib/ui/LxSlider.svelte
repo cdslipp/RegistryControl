@@ -83,17 +83,14 @@
 			console.error('Error setting light level:', error);
 		}
 	}
-
 </script>
 
-<div id="{lightSetName}-slider" class=slider-wrapper>
-	<FillSlider label="House Lights" bind:percentage/>
+<div id="{lightSetName}-slider" class="slider-wrapper">
+	<FillSlider {label} bind:percentage />
 </div>
 
 <style>
 	.slider-wrapper {
 		grid-row: 2 / span 2;
 	}
-
 </style>
-

@@ -1,23 +1,20 @@
 <script>
-	export let articles;
 </script>
 
-<div id="help-dashboard">
-	<div id="contact-info">
-		<h2>Contact Information:</h2>
+<section class="grid-layout">
+	<a href="/" class="nav-button default-button" id="back-button">
+		<div>
+			<h2>←</h2>
+		</div>
+	</a>
+
+	<div class="default-button tile">
+		<h2>Contact Information</h2>
 		<p>Cameron Slipp</p>
 		<p>(506) 425-0651</p>
 		<p>atd@registrytheatre.com</p>
 	</div>
-
-	<div id="help-grid">
-		{#each articles as topic}
-			<a href={topic.path} class="tile">
-				<h3>{topic.meta.title}</h3>
-			</a>
-		{/each}
-	</div>
-</div>
+</section>
 
 <style>
 	#help-dashboard {

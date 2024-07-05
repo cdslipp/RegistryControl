@@ -22,7 +22,7 @@
 						console.error('Failed to fetch light levels:', error);
 					});
 			}
-		}, 5000); // Poll every 5 seconds
+		}, 1000); // Poll every 1 seconds
 		return () => clearInterval(interval);
 	});
 </script>
@@ -44,7 +44,7 @@
 			<h2>HELP</h2>
 		</div>
 	</a>
-	<a href="/video" id="video-button" class="nav-button">
+	<a href="/video/projector" id="video-button" class="nav-button">
 		<div>
 			<h2>VIDEO</h2>
 		</div>
@@ -113,5 +113,4 @@
 	:global(#house-slider) {
 		grid-column: 3;
 	}
-
 </style>

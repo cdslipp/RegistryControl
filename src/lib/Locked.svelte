@@ -2,7 +2,7 @@
 	import Nav from './Nav.svelte';
 </script>
 
-<Nav headerLine1="Show in progress." headerLine2=""/>
+<Nav headerLine1="Show in progress." headerLine2="" />
 <div class="locked-out">
 	<img src="lock.svg" class="lock-icon" alt="Lock icon" />
 	<a href="/pin" class="unlock-button">UNLOCK</a>
@@ -25,10 +25,13 @@
 
 	.message {
 		margin-bottom: 2rem; /* Space below the message */
+		text-align: center;
 	}
 
 	.unlock-button {
 		background-color: orange;
+		text-align: center;
+		text-decoration: none;
 		border: none;
 		padding: 2rem;
 		width: 30%;
