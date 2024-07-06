@@ -13,18 +13,18 @@ let lastSentValues = {};
  * @returns {Promise<Response[]>} - A promise that resolves with an array of responses from the dimmer racks.
  */
 const sendCommand = async (xmlCommand) => {
-    const racks = get(dimmerRacks);
-    const promises = racks.map((ip) =>
-        fetch(`http://${ip}/goform/dimmertest`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'text/xml',
-            },
-            body: xmlCommand,
-        })
-    );
-    const responses = await Promise.all(promises);
-    return responses;
+	const racks = get(dimmerRacks);
+	const promises = racks.map((ip) =>
+		fetch(`http://${ip}/goform/dimmertest`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'text/xml'
+			},
+			body: xmlCommand
+		})
+	);
+	const responses = await Promise.all(promises);
+	return responses;
 };
 
 /**
@@ -33,17 +33,17 @@ const sendCommand = async (xmlCommand) => {
  * @returns {Promise<Response[]>} - A promise that resolves with an array of responses from the dimmer racks.
  */
 const rateLimitedSendCommand = async (xmlCommand) => {
-    const { minDelayBetweenCalls } = get(apiConfig);
-    const now = Date.now();
-    if (now - lastCallTimestamp < minDelayBetweenCalls) {
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                rateLimitedSendCommand(xmlCommand).then(resolve).catch(reject);
-            }, minDelayBetweenCalls - (now - lastCallTimestamp));
-        });
-    }
-    lastCallTimestamp = now;
-    return sendCommand(xmlCommand);
+	const { minDelayBetweenCalls } = get(apiConfig);
+	const now = Date.now();
+	if (now - lastCallTimestamp < minDelayBetweenCalls) {
+		return new Promise((resolve, reject) => {
+			setTimeout(() => {
+				rateLimitedSendCommand(xmlCommand).then(resolve).catch(reject);
+			}, minDelayBetweenCalls - (now - lastCallTimestamp));
+		});
+	}
+	lastCallTimestamp = now;
+	return sendCommand(xmlCommand);
 };
 
 /**
@@ -51,14 +51,14 @@ const rateLimitedSendCommand = async (xmlCommand) => {
  * @returns {Promise<void>} - A promise that resolves when the lights have been released.
  */
 export const releaseAllLights = async () => {
-    const xmlCommand = `<release_all space="1" />`;
-    try {
-        console.log('Sending release all lights command:', xmlCommand);
-        await rateLimitedSendCommand(xmlCommand);
-        console.log('All lights released successfully.');
-    } catch (error) {
-        console.error('Error releasing all lights:', error);
-    }
+	const xmlCommand = `<release_all space="1" />`;
+	try {
+		console.log('Sending release all lights command:', xmlCommand);
+		await rateLimitedSendCommand(xmlCommand);
+		console.log('All lights released successfully.');
+	} catch (error) {
+		console.error('Error releasing all lights:', error);
+	}
 };
 
 /**
@@ -69,37 +69,37 @@ export const releaseAllLights = async () => {
  * @returns {Promise<void>} - A promise that resolves when the command has been sent.
  */
 export const setLightLevel = async (lightSetName, level) => {
-    // If the level is 0, release all lights and return early
-    if (level === 0) {
-        await releaseAllLights();
-        return;
-    }
+	// If the level is 0, release all lights and return early
+	if (level === 0) {
+		await releaseAllLights();
+		return;
+	}
 
-    // Retrieve the channel numbers for the given light set using the helper function
-    const channels = getChannelNumbers(lightSetName);
+	// Retrieve the channel numbers for the given light set using the helper function
+	const channels = getChannelNumbers(lightSetName);
 
-    // If no channels are found for the given light set, log an error and return early
-    if (!channels) {
-        console.error(`No channels found for light set: ${lightSetName}`);
-        return;
-    }
+	// If no channels are found for the given light set, log an error and return early
+	if (!channels) {
+		console.error(`No channels found for light set: ${lightSetName}`);
+		return;
+	}
 
-    // Sort the channel numbers and create a unique key for caching purposes
-    const sortedChannels = [...channels].sort();
-    const channelKey = sortedChannels.join(',');
+	// Sort the channel numbers and create a unique key for caching purposes
+	const sortedChannels = [...channels].sort();
+	const channelKey = sortedChannels.join(',');
 
-    // Prevent repeated calls with the same value
-    if (lastSentValues[channelKey] === level) return;
-    lastSentValues[channelKey] = level;
+	// Prevent repeated calls with the same value
+	if (lastSentValues[channelKey] === level) return;
+	lastSentValues[channelKey] = level;
 
-    // Build the XML command with the actual channel numbers
-    const xmlCommands = sortedChannels.map(channelNumber => 
-        `<set udn="${channelNumber}" space="1" level="${level}" side="both"/>`
-    ).join('');
-    const xmlCommand = `<setlevels>${xmlCommands}</setlevels>`;
+	// Build the XML command with the actual channel numbers
+	const xmlCommands = sortedChannels
+		.map((channelNumber) => `<set udn="${channelNumber}" space="1" level="${level}" side="both"/>`)
+		.join('');
+	const xmlCommand = `<setlevels>${xmlCommands}</setlevels>`;
 
-    console.log('Sending XML command:', xmlCommand);
-    return rateLimitedSendCommand(xmlCommand);
+	// console.log('Sending XML command:', xmlCommand);
+	return rateLimitedSendCommand(xmlCommand);
 };
 
 /**
@@ -107,40 +107,41 @@ export const setLightLevel = async (lightSetName, level) => {
  * @returns {Promise<Object>} - A promise that resolves with an object where keys are channel UDNs and values are light levels.
  */
 export const fetchLightLevels = async () => {
-    const xmlCommand = `<setlevels><get udn="all"/></setlevels>`;
-    try {
-        const responses = await rateLimitedSendCommand(xmlCommand);
-        const levels = await Promise.all(responses.map(async (res) => {
-            const text = await res.text();
-            console.log('Response Text:', text);
-            
-            // Convert XML to JSON
-            const jsonData = xml2js(text, { compact: true, spaces: 2 });
-            console.log('JSON Data:', jsonData);
-            
-            // Extract levels from JSON (you need to adjust this path according to your XML structure)
-            const levelData = jsonData.html.information.info.map(info => ({
-              udn: info._attributes.udn,
-              level: info._attributes.level
-            }));
-            
-            // Convert array to object
-            const levelObject = {};
-            levelData.forEach(item => {
-              levelObject[item.udn] = item.level;
-            });
-            
-            return levelObject;
-        }));
-        
-        // Merge all level objects into one
-        const allLevels = Object.assign({}, ...levels);
-        return allLevels;
-        
-    } catch (error) {
-        console.error('Failed to fetch light levels:', error);
-        return {}; // Return a valid object in case of network errors
-    }
+	const xmlCommand = `<setlevels><get udn="all"/></setlevels>`;
+	try {
+		const responses = await rateLimitedSendCommand(xmlCommand);
+		const levels = await Promise.all(
+			responses.map(async (res) => {
+				const text = await res.text();
+				// console.log('Response Text:', text);
+
+				// Convert XML to JSON
+				const jsonData = xml2js(text, { compact: true, spaces: 2 });
+				// console.log('JSON Data:', jsonData);
+
+				// Extract levels from JSON (you need to adjust this path according to your XML structure)
+				const levelData = jsonData.html.information.info.map((info) => ({
+					udn: info._attributes.udn,
+					level: info._attributes.level
+				}));
+
+				// Convert array to object
+				const levelObject = {};
+				levelData.forEach((item) => {
+					levelObject[item.udn] = item.level;
+				});
+
+				return levelObject;
+			})
+		);
+
+		// Merge all level objects into one
+		const allLevels = Object.assign({}, ...levels);
+		return allLevels;
+	} catch (error) {
+		console.error('Failed to fetch light levels:', error);
+		return {}; // Return a valid object in case of network errors
+	}
 };
 
 /**
@@ -149,17 +150,20 @@ export const fetchLightLevels = async () => {
  * @returns {Promise<number>} - A promise that resolves with the average light level of the channels in the light set.
  */
 export const getLightLevel = async (lightSetName) => {
-    const channels = getChannelNumbers(lightSetName);
+	const channels = getChannelNumbers(lightSetName);
 
-    const allLevels = await fetchLightLevels();
-    const relevantLevels = channels.map(channel => allLevels[channel]).filter(level => level !== undefined);
-    console.log(allLevels, relevantLevels);
+	const allLevels = await fetchLightLevels();
+	const relevantLevels = channels
+		.map((channel) => allLevels[channel])
+		.filter((level) => level !== undefined);
+	console.log(allLevels, relevantLevels);
 
-    if (relevantLevels.length === 0) {
-        console.warn(`No light levels found for channels: ${channels.join(', ')}`);
-        return 0;
-    }
+	if (relevantLevels.length === 0) {
+		console.warn(`No light levels found for channels: ${channels.join(', ')}`);
+		return 0;
+	}
 
-    const averageLevel = relevantLevels.reduce((sum, level) => sum + level, 0) / relevantLevels.length;
-    return averageLevel;
+	const averageLevel =
+		relevantLevels.reduce((sum, level) => sum + level, 0) / relevantLevels.length;
+	return averageLevel;
 };

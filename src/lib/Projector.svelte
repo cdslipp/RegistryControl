@@ -27,16 +27,17 @@
 	});
 </script>
 
-<Nav headerLine1="Projector" headerLine2="Control Panel"/>
+<Nav headerLine1="Projector" headerLine2="Control Panel" />
 <section id="main-grid">
 	<a href="/" id="back-button" class="nav-button default-button">
 		<div>
-            <h2>←</h2>
+			<h2>←</h2>
 		</div>
 	</a>
-		<CompanionButton page={1} button={2} label="CENTRE STAGE SPOT" />
-		<CompanionButton page={1} button={3} label="RESTORE BOARD CONTROL" />
-
+	<CompanionButton page={1} button={2} label="Shutter On" />
+	<CompanionButton page={1} button={3} label="Shutter Off" />
+	<CompanionButton page={1} button={4} label="Projector On" />
+	<CompanionButton page={1} button={5} label="Projector Off" />
 </section>
 
 <style>

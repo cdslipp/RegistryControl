@@ -5,10 +5,10 @@
 	import { activeSliders } from '$lib/lx/lxStores';
 	import { fetchLightLevels } from '$lib/lx/lxApi';
 	import { get, writable } from 'svelte/store';
-	import CompanionButton from '$lib/companion/CompanionButton.svelte';
 	import Nav from './Nav.svelte';
 
 	const lightLevels = writable({});
+	let isLightsOn = false;
 
 	onMount(() => {
 		const interval = setInterval(() => {
@@ -25,6 +25,18 @@
 		}, 1000); // Poll every 1 seconds
 		return () => clearInterval(interval);
 	});
+
+	async function toggleTPLights() {
+		console.log('Turning on!');
+		try {
+			await fetch('/api/tplight/turnOn', {
+				method: 'POST',
+				body: ''
+			});
+		} catch (error) {
+			console.error('Failed to toggle TP-Link lights:', error);
+		}
+	}
 </script>
 
 <Nav />
@@ -32,7 +44,11 @@
 	<button id="showModeButton" on:click={toggleShowMode}>
 		<h2>SHOW MODE</h2>
 	</button>
-	<CompanionButton page={1} button={1} isToggle={true} />
+	<button class="nav-button" on:click={toggleTPLights}>
+		<div>
+			<h2>{isLightsOn ? 'TURN OFF WORK LIGHTS' : 'TURN ON WORK LIGHTS'}</h2>
+		</div>
+	</button>
 	<a href="/lights" class="nav-button" id="lighting-button">
 		<div>
 			<h2>LIGHTING</h2>
